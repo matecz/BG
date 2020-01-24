@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\BGBLL\BGBLL.csproj" />
+      <ProjectReference Include="..\BGInfrastructure\BGInfrastructure.csproj" />
       <ProjectReference Include="..\BGPersistence\BGPersistence.csproj" />
     </ItemGroup>
 

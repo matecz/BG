@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BGBLL.Interfaces.Persistence;
+using BGInfrastructure.RabbitMQ;
 using BGPersistence;
 using BGPersistence.Repositories;
 using Microsoft.AspNetCore.Builder;
@@ -36,7 +37,10 @@ namespace BGAPI
             services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("Storage"));
             services.AddScoped<IUserRepository, UserRepository>();
             
-            //Documentication
+            //InfraStructure
+            services.AddRabbit(Configuration);
+            
+            //Documentation
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "bgAPI", Version = "v1"}); });
         }
 

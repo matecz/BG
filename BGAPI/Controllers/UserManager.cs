@@ -1,8 +1,10 @@
 using System.Threading.Tasks;
+using BGBLL.Interfaces.Infrastructure;
 using BGBLL.Interfaces.Persistence;
 using BGDomain.DTOs;
 using BGDomain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using RabbitMQ.Client;
 
 namespace BGAPI.Controllers
 {
@@ -11,10 +13,12 @@ namespace BGAPI.Controllers
     public class UserManager : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRabbitManager _rabbitManager;
 
-        public UserManager(IUserRepository userRepository)
+        public UserManager(IUserRepository userRepository, IRabbitManager rabbitManager)
         {
             _userRepository = userRepository;
+            _rabbitManager = rabbitManager;
         }
 
         // GET: api/values
@@ -47,6 +51,11 @@ namespace BGAPI.Controllers
                 Email = user.Email,
                 Hobbies = user.Hobbies,
             });
+            _rabbitManager.Publish(new  
+            {  
+                Message = "User Created",
+                Name = $"{user.Name}"
+            }, "demo.exchange.topic.dotnetcore", ExchangeType.Topic, "*.queue.durable.dotnetcore.#");
             return Ok();
         }
 
@@ -72,6 +81,11 @@ namespace BGAPI.Controllers
                 Email = user.Email,
                 Hobbies = user.Hobbies,
             });
+            _rabbitManager.Publish(new  
+            {  
+                Message = "User Updated",
+                Name = $"{user.Name}"
+            }, "demo.exchange.topic.dotnetcore", ExchangeType.Topic, "*.queue.durable.dotnetcore.#");
             return Ok();
         }
 
@@ -83,8 +97,13 @@ namespace BGAPI.Controllers
             {
                 return BadRequest();
             }
-
             await _userRepository.Remove(userToRemove);
+            
+            _rabbitManager.Publish(new  
+            {  
+                Message = "User Updated",
+                Name = $"{userToRemove.Name}"
+            }, "demo.exchange.topic.dotnetcore", ExchangeType.Topic, "*.queue.durable.dotnetcore.#");
             return Ok();
         }
     }
