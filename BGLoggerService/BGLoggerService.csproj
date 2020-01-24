@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-BGLoggerService-42D88089-96F2-4BB4-A338-6C637463E794</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.1" />
+        <PackageReference Include="RabbitMQ.Client" Version="5.1.2" />
+    </ItemGroup>
+</Project>
