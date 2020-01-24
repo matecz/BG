@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGAPI", "BGAPI\BGAPI.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGDomain", "BGDomain\BGDomain.csproj", "{0732731C-DC62-4887-91E8-8A151A06C799}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGPersistence", "BGPersistence\BGPersistence.csproj", "{481B82AB-07AC-4E94-80F3-FBEC3D14BF66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BGBLL", "BGBLL\BGBLL.csproj", "{54BE6245-9C31-4BF6-8684-48BF4D86BE47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{0732731C-DC62-4887-91E8-8A151A06C799}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0732731C-DC62-4887-91E8-8A151A06C799}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0732731C-DC62-4887-91E8-8A151A06C799}.Release|Any CPU.Build.0 = Release|Any CPU
+		{481B82AB-07AC-4E94-80F3-FBEC3D14BF66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{481B82AB-07AC-4E94-80F3-FBEC3D14BF66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{481B82AB-07AC-4E94-80F3-FBEC3D14BF66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{481B82AB-07AC-4E94-80F3-FBEC3D14BF66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54BE6245-9C31-4BF6-8684-48BF4D86BE47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54BE6245-9C31-4BF6-8684-48BF4D86BE47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54BE6245-9C31-4BF6-8684-48BF4D86BE47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54BE6245-9C31-4BF6-8684-48BF4D86BE47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
