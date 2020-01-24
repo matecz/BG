@@ -25,6 +25,8 @@ namespace BGPersistence.Repositories
 
         public async Task Add(T entity)
         {
+            entity.CreatedDate = DateTime.Now;
+            entity.ModifiedDate = DateTime.Now;
             await _context.Set<T>().AddAsync(entity);
             await _context.SaveChangesAsync();       
         }
@@ -34,6 +36,8 @@ namespace BGPersistence.Repositories
             var toUpdate =  GetById(entity.Id).Result;
             if (toUpdate != null)
             {
+                entity.ModifiedDate = DateTime.Now;
+                entity.CreatedDate = toUpdate.CreatedDate;
                 _context.Entry(toUpdate).CurrentValues.SetValues(entity);
             }
             return _context.SaveChangesAsync();
