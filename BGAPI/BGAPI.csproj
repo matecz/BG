@@ -8,5 +8,14 @@
       <Folder Include="Controllers" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\BGBLL\BGBLL.csproj" />
+      <ProjectReference Include="..\BGPersistence\BGPersistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.1" />
+    </ItemGroup>
+
 
 </Project>
