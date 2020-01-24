@@ -26,7 +26,8 @@ namespace BGInfrastructure.RabbitMQ
   
             try  
             {  
-                channel.ExchangeDeclare(exchangeName, exchangeType, true, false, null);  
+                //channel.ExchangeDeclare(exchangeName, exchangeType, true, false, null);
+                channel.QueueDeclare("bg.queue.log", false, false, false, null);
   
                 var sendBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));  
   

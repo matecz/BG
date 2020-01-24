@@ -55,7 +55,8 @@ namespace BGAPI.Controllers
             {  
                 Message = "User Created",
                 Name = $"{user.Name}"
-            }, "demo.exchange.topic.dotnetcore", ExchangeType.Topic, "*.queue.durable.dotnetcore.#");
+            }, "", "", "bg.queue.log");
+
             return Ok();
         }
 
@@ -85,7 +86,7 @@ namespace BGAPI.Controllers
             {  
                 Message = "User Updated",
                 Name = $"{user.Name}"
-            }, "demo.exchange.topic.dotnetcore", ExchangeType.Topic, "*.queue.durable.dotnetcore.#");
+            }, "", "", "bg.queue.log");
             return Ok();
         }
 
@@ -101,9 +102,9 @@ namespace BGAPI.Controllers
             
             _rabbitManager.Publish(new  
             {  
-                Message = "User Updated",
+                Message = "User Deleted",
                 Name = $"{userToRemove.Name}"
-            }, "demo.exchange.topic.dotnetcore", ExchangeType.Topic, "*.queue.durable.dotnetcore.#");
+            }, "", "", "bg.queue.log");
             return Ok();
         }
     }
