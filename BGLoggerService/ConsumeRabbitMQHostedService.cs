@@ -32,7 +32,8 @@ namespace BGLoggerService
             // create channel  
             _channel = _connection.CreateModel();
 
-            // declaring the queue        _channel.QueueDeclare("bg.queue.log", false, false, false, null);
+            // declaring the queue
+            _channel.QueueDeclare("bg.queue.log", false, false, false, null);
 
             _channel.BasicQos(0, 1, false);
 
