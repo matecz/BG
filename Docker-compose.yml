@@ -1,24 +1,24 @@
 version: "3"
 services:
-  rabbitmq:
-    image: 'bitnami/rabbitmq:3.8'
+  rabbitmq: # login guest:guest
+    image: rabbitmq:3-management
     ports:
-      - '4369:4369'
-      - '5672:5672'
-      - '25672:25672'
-      - '15672:15672'
-    volumes:
-      - 'rabbitmq_data:/bitnami'
+      - "5672:5672"
+      - "15672:15672"
+  bglogger:
+    image: matecz/bglogger
+    expose:
+      - "3000"
+    restart: on-failure
+    depends_on:
+      - rabbitmq
   bgapi:
-    image: 'matecz/bgapi'
+    image: matecz/bgapi
     ports:
       - "8080:80"
-  bglogger:
-    image: 'matecz/bglogger'
-    ports:
-      - "8080:70"
-volumes:
-  rabbitmq_data:
-    driver: local
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+  
 
   

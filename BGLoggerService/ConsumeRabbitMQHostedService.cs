@@ -24,7 +24,7 @@ namespace BGLoggerService
 
         private void InitRabbitMQ()
         {
-            var factory = new ConnectionFactory {HostName = "localhost"};
+            var factory = new ConnectionFactory {HostName = "rabbitmq"};
 
             // create connection  
             _connection = factory.CreateConnection();
