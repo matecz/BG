@@ -23,11 +23,12 @@ namespace BGLoggerService
             _rabbitOptions = rabbitOptions;
             _logger = loggerFactory.CreateLogger<ConsumeRabbitMQHostedService>();
             
-            InitRabbitMq();
+            while(!InitRabbitMq()){};
         }
 
-        private void InitRabbitMq()
+        private bool InitRabbitMq()
         {
+            Thread.Sleep(4000);
             var factory = new ConnectionFactory()  
             {  
                 HostName = _rabbitOptions.HostName,  
@@ -36,17 +37,28 @@ namespace BGLoggerService
                 Port = _rabbitOptions.Port,  
                 VirtualHost = _rabbitOptions.VHost,  
             }; 
-
-            // create connection  
-            _connection = factory.CreateConnection();
-
+            
+            // try create connection
+            try
+            {
+                _connection = factory.CreateConnection();
+            }
+            catch (Exception)
+            {
+                _logger.LogInformation("Waiting for MQ...");
+                return false;
+            }
+            
             // create channel  
             _channel = _connection.CreateModel();
 
             // declaring the queue
             _channel.QueueDeclare("bg.queue.log", false, false, false, null);
-
             _channel.BasicQos(0, 1, false);
+            
+            _logger.LogInformation("Rabbit MQ connection is up. Listening to Queue: bg.queue.log");
+
+            return true;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
