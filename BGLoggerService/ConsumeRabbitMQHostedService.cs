@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BGInfrastructure.RabbitMQ;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -12,19 +13,29 @@ namespace BGLoggerService
 {
     public class ConsumeRabbitMQHostedService : BackgroundService
     {
+        private readonly RabbitOptions _rabbitOptions;
         private readonly ILogger _logger;
         private IConnection _connection;
         private IModel _channel;
 
-        public ConsumeRabbitMQHostedService(ILoggerFactory loggerFactory)
+        public ConsumeRabbitMQHostedService(ILoggerFactory loggerFactory, RabbitOptions rabbitOptions)
         {
-            this._logger = loggerFactory.CreateLogger<ConsumeRabbitMQHostedService>();
-            InitRabbitMQ();
+            _rabbitOptions = rabbitOptions;
+            _logger = loggerFactory.CreateLogger<ConsumeRabbitMQHostedService>();
+            
+            InitRabbitMq();
         }
 
-        private void InitRabbitMQ()
+        private void InitRabbitMq()
         {
-            var factory = new ConnectionFactory {HostName = "rabbitmq"};
+            var factory = new ConnectionFactory()  
+            {  
+                HostName = _rabbitOptions.HostName,  
+                UserName = _rabbitOptions.UserName,  
+                Password = _rabbitOptions.Password,  
+                Port = _rabbitOptions.Port,  
+                VirtualHost = _rabbitOptions.VHost,  
+            }; 
 
             // create connection  
             _connection = factory.CreateConnection();
@@ -36,8 +47,6 @@ namespace BGLoggerService
             _channel.QueueDeclare("bg.queue.log", false, false, false, null);
 
             _channel.BasicQos(0, 1, false);
-
-            _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
@@ -55,11 +64,6 @@ namespace BGLoggerService
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
 
-            consumer.Shutdown += OnConsumerShutdown;
-            consumer.Registered += OnConsumerRegistered;
-            consumer.Unregistered += OnConsumerUnregistered;
-            consumer.ConsumerCancelled += OnConsumerConsumerCancelled;
-
             _channel.BasicConsume("bg.queue.log", false, consumer);
             return Task.CompletedTask;
         }
@@ -67,27 +71,7 @@ namespace BGLoggerService
         private void HandleMessage(string content)
         {
             // we just print this message   
-            _logger.LogInformation($"consumer received {content}");
-        }
-
-        private void OnConsumerConsumerCancelled(object sender, ConsumerEventArgs e)
-        {
-        }
-
-        private void OnConsumerUnregistered(object sender, ConsumerEventArgs e)
-        {
-        }
-
-        private void OnConsumerRegistered(object sender, ConsumerEventArgs e)
-        {
-        }
-
-        private void OnConsumerShutdown(object sender, ShutdownEventArgs e)
-        {
-        }
-
-        private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e)
-        {
+            _logger.LogInformation($"{content}");
         }
 
         public override void Dispose()
